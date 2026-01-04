@@ -1,0 +1,31 @@
+<project>
+  <parent>
+    <groupId>com.adplatform</groupId>
+    <artifactId>ad-click-platform</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <artifactId>data-generator</artifactId>
+
+  <dependencies>
+    <!-- Shared Protobuf classes -->
+    <dependency>
+      <groupId>com.adplatform</groupId>
+      <artifactId>proto</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <!-- gRPC -->
+    <dependency>
+      <groupId>net.devh</groupId>
+      <artifactId>grpc-server-spring-boot-starter</artifactId>
+      <version>2.15.0.RELEASE</version>
+    </dependency>
+
+    <!-- Spring Boot -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package adplatform.clickstream;
+
+option java_multiple_files = true;
+option java_package = "com.adplatform.clickstream.proto";
+option java_outer_classname = "ClickProto";
+
+/*
+ * Core event representing an ad impression or click.
+ * Designed for high-throughput streaming systems.
+ */
+message ClickEvent {
+  string event_id        = 1;  // UUID for idempotency
+  string user_id         = 2;  // Partition key
+  string ad_id           = 3;
+  int64  event_timestamp = 4;  // Epoch millis (event time)
+
+  bool   clicked         = 5;  // Label
+  double bid_price       = 6;  // Cost per impression
+
+  Context context        = 7;  // Request metadata
+}
+
+/*
+ * Contextual information used for feature engineering.
+ */
+message Context {
+  string device_type = 1;  // mobile / desktop / tablet
+  string os          = 2;  // ios / android / windows
+  string country     = 3;
+  string region      = 4;
+}
+
+/*
+ * Request to start streaming click events.
+ */
+message ClickStreamRequest {
+  int32 events_per_second = 1;
+}
+
+/*
+ * Recommendation request from serving layer.
+ */
+message RecommendationRequest {
+  string user_id = 1;
+  int32  limit   = 2;
+}
+
+/*
+ * Individual recommendation response.
+ */
+message Recommendation {
+  string ad_id = 1;
+  double score = 2;
+}
+
+/*
+ * gRPC service that produces clickstream events.
+ */
+service DataGeneratorService {
+  rpc StreamClicks(ClickStreamRequest) returns (stream ClickEvent);
+}
+
+/*
+ * gRPC service that serves ad recommendations.
+ */
+service RecommendationService {
+  rpc GetRecommendations(RecommendationRequest)
+      returns (stream Recommendation);
+}
